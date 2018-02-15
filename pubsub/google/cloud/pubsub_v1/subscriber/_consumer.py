@@ -233,6 +233,7 @@ class Consumer(object):
 
             _LOGGER.debug('Sending request:\n%r', request)
             yield request
+            policy.on_request_sent(request)
 
     def _stop_request_generator(self, request_generator, response_generator):
         """Ensure a request generator is closed.

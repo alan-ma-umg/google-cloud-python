@@ -335,5 +335,4 @@ class Policy(base.BasePolicy):
                 'Using %s to process new message received:\n%r',
                 self._callback, msg)
             message = Message(msg.message, msg.ack_id, self._request_queue)
-            future = self._executor.submit(self._callback, message)
-            future.add_done_callback(_callback_completed)
+            self._executor.submit(self._callback, message)

@@ -156,7 +156,13 @@ class BasePolicy(object):
         return max([
             len(self.managed_ack_ids) / self.flow_control.max_messages,
             self._bytes / self.flow_control.max_bytes,
+            self._consumer._request_queue.qsize() / 100
         ])
+
+    def on_request_sent(self, request):
+        if (self._consumer.paused and
+                self._load < self.flow_control.resume_threshold):
+            self._consumer.resume()
 
     def ack(self, ack_id, time_to_ack=None, byte_size=None):
         """Acknowledge the message corresponding to the given ack_id.
